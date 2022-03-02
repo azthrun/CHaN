@@ -1,4 +1,3 @@
-using Inventory.Api.Abstractions;
 using Newtonsoft.Json;
 
 namespace Inventory.Api.Models;

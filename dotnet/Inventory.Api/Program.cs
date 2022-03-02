@@ -1,12 +1,3 @@
-using Inventory.Api.Abstractions;
-using Inventory.Api.Authentication;
-using Inventory.Api.Data;
-using Inventory.Api.Models;
-using Inventory.Api.Repositories;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.Azure.Cosmos;
-using User = Inventory.Api.Models.User;
-
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("Cosmos");

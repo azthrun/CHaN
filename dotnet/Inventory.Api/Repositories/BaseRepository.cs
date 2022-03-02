@@ -1,9 +1,3 @@
-using Inventory.Api.Abstractions;
-using Inventory.Api.Data;
-using Inventory.Api.Exceptions;
-using Inventory.Api.Models;
-using Microsoft.Azure.Cosmos;
-
 namespace Inventory.Api.Repositories;
 
 public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : BaseModel

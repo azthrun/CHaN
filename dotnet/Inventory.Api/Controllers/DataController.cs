@@ -1,7 +1,4 @@
-using Inventory.Api.Abstractions;
-using Inventory.Api.Exceptions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Inventory.Api.Controllers;
 

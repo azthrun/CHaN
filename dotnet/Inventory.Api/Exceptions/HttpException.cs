@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace Inventory.Api.Exceptions;
 
 public class HttpException : Exception

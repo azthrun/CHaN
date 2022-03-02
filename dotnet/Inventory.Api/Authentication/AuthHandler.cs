@@ -1,8 +1,3 @@
-using Inventory.Api.Abstractions;
-using Inventory.Api.Data;
-using Inventory.Api.Models;
-using Inventory.Api.Repositories;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;

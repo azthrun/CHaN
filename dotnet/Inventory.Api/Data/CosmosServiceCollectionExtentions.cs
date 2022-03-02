@@ -1,5 +1,3 @@
-using Microsoft.Azure.Cosmos;
-
 namespace Inventory.Api.Data;
 
 public static class CosmosServiceCollectionExtentions

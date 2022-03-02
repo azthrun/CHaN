@@ -1,7 +1,3 @@
-using Inventory.Api.Abstractions;
-using Inventory.Api.Models;
-using Microsoft.AspNetCore.Mvc;
-
 namespace Inventory.Api.Controllers;
 
 [Route("[controller]")]

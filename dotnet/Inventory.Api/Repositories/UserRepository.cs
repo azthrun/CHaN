@@ -1,8 +1,3 @@
-using Inventory.Api.Data;
-using Inventory.Api.Exceptions;
-using User = Inventory.Api.Models.User;
-using Microsoft.Azure.Cosmos;
-
 namespace Inventory.Api.Repositories;
 
 public class UserRepository : BaseRepository<User>
