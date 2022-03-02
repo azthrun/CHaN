@@ -1,7 +1,11 @@
+using Inventory.Api.Abstractions;
 using Inventory.Api.Authentication;
 using Inventory.Api.Data;
+using Inventory.Api.Models;
+using Inventory.Api.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Azure.Cosmos;
+using User = Inventory.Api.Models.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +14,9 @@ builder.Services.UseCosmos(connectionString, "Inventory", new()
 {
     SerializerOptions = new() { PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase }
 });
+builder.Services.AddSingleton<IRepository<User>, UserRepository>();
+builder.Services.AddSingleton<IRepository<Item>, ItemRepository>();
+builder.Services.AddSingleton<IRepository<Sale>, SaleRepository>();
 builder.Services.AddControllers().AddNewtonsoftJson(o =>
 {
     o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;

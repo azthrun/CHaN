@@ -1,6 +1,5 @@
-using Inventory.Api.Data;
+using Inventory.Api.Abstractions;
 using Inventory.Api.Models;
-using Inventory.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventory.Api.Controllers;
@@ -8,8 +7,7 @@ namespace Inventory.Api.Controllers;
 [Route("[controller]")]
 public class SaleController : DataController<Sale>
 {
-    public SaleController(ILogger<SaleController> logger, CosmosContainerProvider containerProvider)
-        : base(new SaleRepository(containerProvider))
+    public SaleController(ILogger<SaleController> logger, IRepository<Sale> repository) : base(repository)
     {
         Logger = logger;
     }

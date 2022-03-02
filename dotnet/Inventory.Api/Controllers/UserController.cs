@@ -1,7 +1,6 @@
-using Inventory.Api.Data;
+using Inventory.Api.Abstractions;
 using Inventory.Api.Exceptions;
 using Inventory.Api.Models;
-using Inventory.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventory.Api.Controllers;
@@ -9,8 +8,7 @@ namespace Inventory.Api.Controllers;
 [Route("[controller]")]
 public class UserController : DataController<User>
 {
-    public UserController(ILogger<UserController> logger, CosmosContainerProvider containerProvider)
-        : base(new UserRepository(containerProvider))
+    public UserController(ILogger<UserController> logger, IRepository<User> repository) : base(repository)
     {
         Logger = logger;
     }
