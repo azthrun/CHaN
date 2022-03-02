@@ -25,28 +25,6 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Base
         }
     }
 
-    public virtual async Task<IEnumerable<TEntity>> QueryAsync(long timestamp, bool includeDeleted)
-    {
-        await InitAsync();
-        if (container is null) throw new RepositoryException("Container is not set");
-        try
-        {
-            List<TEntity> results = new();
-            var query = $"SELECT * FROM c WHERE c._ts >= {timestamp} {(!includeDeleted ? " AND c.deleted = false" : null)}";
-            var iterator = container.GetItemQueryIterator<TEntity>(query);
-            while (iterator.HasMoreResults)
-            {
-                var entity = await iterator.ReadNextAsync();
-                results.AddRange(entity.Resource);
-            }
-            return results;
-        }
-        catch (Exception ex)
-        {
-            throw new RepositoryException(ex.Message, ex);
-        }
-    }
-
     public virtual async Task CreateAsync(TEntity entity)
     {
         await InitAsync();
@@ -87,22 +65,47 @@ public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Base
         }
     }
 
-    public virtual async Task<TEntity> ReadAsync(string id)
+    public virtual async Task<IEnumerable<TEntity>> QueryAsync(long timestamp, bool includeDeleted)
     {
         await InitAsync();
         if (container is null) throw new RepositoryException("Container is not set");
-        if (string.IsNullOrEmpty(id)) throw new BadRequestException();
         try
         {
-            var test = typeof(TEntity).Name.ToLower();
-            var entity = await container.ReadItemAsync<TEntity>(id, new(typeof(TEntity).Name.ToLower())).ConfigureAwait(false);
-            if (entity is null) throw new NotFoundException();
-            return entity;
+            List<TEntity> results = new();
+            var query = $"SELECT * FROM c WHERE c._ts >= {timestamp} {(!includeDeleted ? " AND c.deleted = false" : null)}";
+            var iterator = container.GetItemQueryIterator<TEntity>(query);
+            while (iterator.HasMoreResults)
+            {
+                var entity = await iterator.ReadNextAsync();
+                results.AddRange(entity.Resource);
+            }
+            return results;
         }
         catch (Exception ex)
         {
             throw new RepositoryException(ex.Message, ex);
         }
+    }
+
+    public virtual async Task<TEntity> ReadAsync(string id)
+    {
+        await InitAsync();
+        if (container is null) throw new RepositoryException("Container is not set");
+        if (string.IsNullOrEmpty(id)) throw new BadRequestException();
+        TEntity entity;
+        try
+        {
+            entity = await container.ReadItemAsync<TEntity>(id, new(typeof(TEntity).Name.ToLower())).ConfigureAwait(false);
+        }
+        catch (CosmosException cex) when (cex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            throw new NotFoundException();
+        }
+        catch (Exception ex)
+        {
+            throw new RepositoryException(ex.Message, ex);
+        }
+        return entity;
     }
 
     public virtual async Task UpdateAsync(string id, TEntity entity)

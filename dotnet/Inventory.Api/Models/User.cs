@@ -11,5 +11,5 @@ public class User : BaseModel
 
     public string? Email { get; set; }
     public string? DisplayName { get; set; }
-    public KeyValuePair<bool, DateTime> ActiveSession { get; set; }
+    public KeyValuePair<string?, DateTime> ActiveSession { get; set; }
 }

@@ -9,11 +9,10 @@ public class Sale : BaseModel
         PartitionKey = PK.ToLower();
     }
 
-    public Sale(Item item) : this()
+    public Sale(string itemId) : this()
     {
-        ItemId = item.Id;
+        ItemId = itemId;
         Quantity = 1;
-        Price = item.BuyInPrice;
         Date = DateTime.Now;
     }
 

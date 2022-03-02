@@ -1,9 +1,11 @@
 using Inventory.Api.Abstractions;
 using Inventory.Api.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventory.Api.Controllers;
 
+[Authorize]
 [ApiController]
 public class DataController<TEntity> : ControllerBase where TEntity : IModel
 {
@@ -55,11 +57,11 @@ public class DataController<TEntity> : ControllerBase where TEntity : IModel
         try
         {
             var entityInStore = await Repository.ReadAsync(id).ConfigureAwait(false); ;
-            if (entityInStore is null)
-            {
-                Logger?.LogWarning($"{nameof(DeleteAsync)} ({id}) - entity not found");
-                return NotFound();
-            }
+            // if (entityInStore is null)
+            // {
+            //     Logger?.LogWarning($"{nameof(DeleteAsync)} ({id}) - entity not found");
+            //     return NotFound();
+            // }
             if (string.IsNullOrEmpty(entityInStore.Id)) throw new InvalidDataException("Invalid entity id");
             if (softDelete)
             {
@@ -73,6 +75,11 @@ public class DataController<TEntity> : ControllerBase where TEntity : IModel
                 await Repository.DeleteAsync(entityInStore).ConfigureAwait(false);
             }
             return NoContent();
+        }
+        catch (NotFoundException ex)
+        {
+            Logger?.LogWarning($"{nameof(DeleteAsync)} ({id}) - entity not found");
+            return NotFound(ex);
         }
         catch (Exception ex)
         {
